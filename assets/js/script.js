@@ -1,39 +1,64 @@
+var cardAreaEl = document.querySelector('#cardArea')
+var historyEl = document.querySelector('#history')
+var srhBtnEl = document.querySelector('#srhBtn')
+var srhInputEl = document.querySelector('#srhInput')
 
-var BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?id=524901&appid=ed9c4a903d4311b954d0f472b07f5c25&id='
+var BASE_URL = 'http://api.openweathermap.org/data/2.5/forecast?appid=ed9c4a903d4311b954d0f472b07f5c25&units=imperial&q='
 
-fetch(BASE_URL+'New+York')
-.then(function(res){
-    if(!res.ok){throw new Error('Oops');};
-    return res.json();
-})
-.then(function(data){
-    console.log(data);
-    console.log(data.name)
-    renderWeather(data);
-})
-.catch(function(error){
-    console.error(error)
+
+
+historyEl.addEventListener('click',function(event){
+    var element = event.target;
+    if(element !== srhBtnEl)return
+    var input = srhInputEl.value
+    var term = BASE_URL + input
+    getForecast(term)
 })
 
-function createCardElement(city){
+
+
+
+
+function getForecast(city){
+    fetch(city)
+    .then(function(res){
+        if(!res.ok){throw new Error('Oops');};
+        return res.json();
+    })
+    .then(function(data){
+        console.log(data);
+        console.log(data.list[0].main.temp)
+        renderWeather(data);
+    })
+    .catch(function(error){
+        console.error(error)
+    })
+}
+
+
+
+
+
+function createCardElement(cast){
+
     var cardEl = document.createElement('div');
-    
+
     var titleEl = document.createElement('h2');
-    titleEl.textContent = city.name + ' (date)';
+    titleEl.textContent = cast.city.name;
     var tempEl = document.createElement('h3');
-    tempEl.textContent = 'temp:'+city.main.temp
+    tempEl.textContent = 'temp: '+ cast.list[0].main.temp + ' °F'
     var windEl = document.createElement('h3');
-    windEl.textContent = 'wind:'+ city.wind.speed
+    windEl.textContent = 'wind: '+ cast.list[0].wind.speed + ' MPH'
     var humidEl = document.createElement('h3');
-    humidEl.textContent = 'humid:'+ city.main.humidity
+    humidEl.textContent = 'humid: '+ cast.list[0].main.humidity + '%'
     cardEl.append(titleEl,tempEl,windEl,humidEl);
     return cardEl;
 }
 
-function renderWeather(city){
+function renderWeather(cast){
+    var weatherDay = createCardElement(cast);
 
-    var weatherDay = createCardElement(city);
-
-    document.body.appendChild(weatherDay);
+    cardAreaEl.appendChild(weatherDay);
+    
 }
 
