@@ -3,7 +3,7 @@ var historyEl = document.querySelector('#history')
 var srhBtnEl = document.querySelector('#srhBtn')
 var srhInputEl = document.querySelector('#srhInput')
 
-var BASE_URL = 'http://api.openweathermap.org/data/2.5/forecast?appid=ed9c4a903d4311b954d0f472b07f5c25&units=imperial&q='
+var BASE_URL = 'https://api.openweathermap.org/data/2.5/forecast?appid=ed9c4a903d4311b954d0f472b07f5c25&units=imperial&q='
 
 
 
@@ -40,7 +40,12 @@ function getForecast(city){
 
 
 function createCardElement(cast){
+    if (cardAreaEl.hasChildNodes()){
+        cardAreaEl.removeChild(cardAreaEl.firstChild)
+    }
+    
 
+    
     var cardEl = document.createElement('div');
 
     var titleEl = document.createElement('h2');
@@ -56,9 +61,9 @@ function createCardElement(cast){
 }
 
 function renderWeather(cast){
-    var weatherDay = createCardElement(cast);
-
-    cardAreaEl.appendChild(weatherDay);
     
+    var weatherDay = createCardElement(cast);
+   
+    cardAreaEl.appendChild(weatherDay);
 }
 
