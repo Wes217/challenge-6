@@ -18,7 +18,7 @@ historyEl.addEventListener('click',function(event){
     getForecast(term)
     saveHistory(input)
 })
-
+//---- Print and save history
 function saveHistory(city){
     if(cityHistory.includes(city)) return
     cityHistory.push(city)
@@ -51,8 +51,9 @@ function historyInit(){
     }
     renderHistory();
 }
+//----
 
-
+//----Api Function
 function getForecast(city){
     fetch(city)
     .then(function(res){
@@ -61,18 +62,17 @@ function getForecast(city){
     })
     .then(function(data){
         console.log(data);
-        console.log(data.list[0].main.temp)
         renderWeather(data);
     })
     .catch(function(error){
         console.error(error)
     })
 }
+//----
 
 
 
-
-
+//----Create weather elements
 function create3hCardElement(cast){
     cardAreaEl.innerHTML = '';
     var cardEl = document.createElement('div');
@@ -111,7 +111,7 @@ function renderWeather(cast){
     cardAreaEl.appendChild(weather3h);
     cardAreaEl.appendChild(weather5D);
 }
-
+//----
 
 
 historyInit()
