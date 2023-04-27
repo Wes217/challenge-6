@@ -9,15 +9,26 @@ var BASE_URL = 'https://api.openweathermap.org/data/2.5/forecast?appid=ed9c4a903
 
 var cityHistory = []
 
-
+//---- Event Listeners
 historyEl.addEventListener('click',function(event){
     var element = event.target;
     if(element !== srhBtnEl)return
     var input = srhInputEl.value
     var term = BASE_URL + input
     getForecast(term)
+    if(input === '') return
     saveHistory(input)
 })
+
+historyListEl.addEventListener('click',function(event){
+    var element = event.target;
+    var hInput = element.textContent
+    console.log(hInput)
+    hTerm = BASE_URL + hInput
+    getForecast(hTerm)
+})
+
+
 //---- Print and save history
 function saveHistory(city){
     if(cityHistory.includes(city)) return
@@ -27,6 +38,7 @@ function saveHistory(city){
 }
 
 function renderHistory(){
+    historyListEl.innerHTML = ''
     for(var i = 0;i < cityHistory.length;i++){
     var HistoryItem = createHistoryItemElement(i)
     historyListEl.appendChild(HistoryItem);
@@ -35,6 +47,7 @@ function renderHistory(){
 }
 
 function createHistoryItemElement(i){
+    
     var itemEl = document.createElement('div');
     itemEl.setAttribute('class','d-grid gap-2');
     var btnEl = document.createElement('button')
@@ -77,14 +90,17 @@ function create3hCardElement(cast){
     cardAreaEl.innerHTML = '';
     var cardEl = document.createElement('div');
     cardEl.classList.add("col-12");
+    var iconEl = document.createElement('i')
+    iconEl.setAttribute('class', cast.list[0].weather[0].icon)
     var titleEl = document.createElement('h2');
     titleEl.textContent = cast.city.name;
-    var tempEl = document.createElement('h3');
+    var tempEl = document.createElement('p');
     tempEl.textContent = 'temp: '+ cast.list[0].main.temp + ' °F'
-    var windEl = document.createElement('h3');
+    var windEl = document.createElement('p');
     windEl.textContent = 'wind: '+ cast.list[0].wind.speed + ' MPH'
-    var humidEl = document.createElement('h3');
+    var humidEl = document.createElement('p');
     humidEl.textContent = 'humid: '+ cast.list[0].main.humidity + '%'
+    titleEl.append(iconEl)
     cardEl.append(titleEl,tempEl,windEl,humidEl);
     return cardEl;
 }
@@ -94,11 +110,11 @@ function create5DCardElement(cast){
     cardEl.classList.add("col-2");
     var titleEl = document.createElement('h2');
     titleEl.textContent = cast.city.name;
-    var tempEl = document.createElement('h3');
+    var tempEl = document.createElement('p');
     tempEl.textContent = 'temp: '+ cast.list[0].main.temp + ' °F'
-    var windEl = document.createElement('h3');
+    var windEl = document.createElement('p');
     windEl.textContent = 'wind: '+ cast.list[0].wind.speed + ' MPH'
-    var humidEl = document.createElement('h3');
+    var humidEl = document.createElement('p');
     humidEl.textContent = 'humid: '+ cast.list[0].main.humidity + '%'
     cardEl.append(titleEl,tempEl,windEl,humidEl);
     return cardEl;
@@ -107,9 +123,12 @@ function create5DCardElement(cast){
 function renderWeather(cast){
     
     var weather3h = create3hCardElement(cast);
-    var weather5D = create5DCardElement(cast);
+    
     cardAreaEl.appendChild(weather3h);
+    for(var i = 0;i < 5;i++){
+    var weather5D = create5DCardElement(cast);
     cardAreaEl.appendChild(weather5D);
+    }
 }
 //----
 
