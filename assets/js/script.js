@@ -90,8 +90,8 @@ function create3hCardElement(cast){
     cardAreaEl.innerHTML = '';
     var cardEl = document.createElement('div');
     cardEl.classList.add("col-12");
-    var iconEl = document.createElement('i')
-    iconEl.setAttribute('class', cast.list[0].weather[0].icon)
+    var dateEl = document.createElement('p')
+    dateEl.textContent =" "+ cast.list[0].dt_txt
     var titleEl = document.createElement('h2');
     titleEl.textContent = cast.city.name;
     var tempEl = document.createElement('p');
@@ -100,7 +100,7 @@ function create3hCardElement(cast){
     windEl.textContent = 'wind: '+ cast.list[0].wind.speed + ' MPH'
     var humidEl = document.createElement('p');
     humidEl.textContent = 'humid: '+ cast.list[0].main.humidity + '%'
-    titleEl.append(iconEl)
+    titleEl.append(dateEl)
     cardEl.append(titleEl,tempEl,windEl,humidEl);
     return cardEl;
 }
@@ -109,13 +109,13 @@ function create5DCardElement(cast){
     var cardEl = document.createElement('div');
     cardEl.classList.add("col-2");
     var titleEl = document.createElement('h2');
-    titleEl.textContent = cast.city.name;
+    titleEl.textContent = cast.dt_txt;
     var tempEl = document.createElement('p');
-    tempEl.textContent = 'temp: '+ cast.list[0].main.temp + ' °F'
+    tempEl.textContent = 'temp: '+ cast.main.temp + ' °F'
     var windEl = document.createElement('p');
-    windEl.textContent = 'wind: '+ cast.list[0].wind.speed + ' MPH'
+    windEl.textContent = 'wind: '+ cast.wind.speed + ' MPH'
     var humidEl = document.createElement('p');
-    humidEl.textContent = 'humid: '+ cast.list[0].main.humidity + '%'
+    humidEl.textContent = 'humid: '+ cast.main.humidity + '%'
     cardEl.append(titleEl,tempEl,windEl,humidEl);
     return cardEl;
 }
@@ -125,8 +125,8 @@ function renderWeather(cast){
     var weather3h = create3hCardElement(cast);
     
     cardAreaEl.appendChild(weather3h);
-    for(var i = 0;i < 5;i++){
-    var weather5D = create5DCardElement(cast);
+    for(var i = 1;i < 40 + 1;i += 8){
+    var weather5D = create5DCardElement(cast.list[i]);
     cardAreaEl.appendChild(weather5D);
     }
 }
